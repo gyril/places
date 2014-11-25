@@ -3,10 +3,11 @@
 <head>
   <meta charset="utf-8">
   <title>Places</title>
-  <script type="text/javascript" src="./angular.min.js"></script>
-  <script type="text/javascript" src="./app.js"></script>
-  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyClGJDuUnPapo-qhzY6iT8aWgAS0MvD_VQ&libraries=places"></script>
-  <link rel="stylesheet" type="text/css" href="./styles.css" />
+  <script type="text/javascript" src="./scripts/vendor/angular.min.js"></script>
+  <script type="text/javascript" src='./scripts/vendor/lodash.js'></script>
+  <script type="text/javascript" src='./scripts/vendor/angular-google-maps.js'></script>
+  <script type="text/javascript" src="./scripts/app.js"></script>
+  <link rel="stylesheet" type="text/css" href="./styles/styles.css" />
 </head>
 <body>
   <div id="left-pane">
@@ -23,14 +24,15 @@
       </ul>
     </div>
   </div>
-  <div id="center-pane" ng-controller="MapFrame as mapframe">
-    <div id="map-canvas"></div>
-    <div id="searchbox">
+  <div id="center-pane" ng-controller="mapCtrl">
+    <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="options">
+    </ui-gmap-google-map>
+    <!-- <div id="searchbox">
       <input type="text" ng-model="query" ng-change="search()" />
       <ul id="autocomplete" ng-show="completelist.length">
         <li ng-repeat="place in completelist" ng-click="placeMarker(place)">{{place.name}} <span class="address">{{place.formatted_address}}</span></li>
       </ul>
-    </div>
+    </div> -->
   </div>
 </body>
 </html>
