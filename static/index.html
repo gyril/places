@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html ng-app="Places">
+<head>
+  <meta charset="utf-8">
+  <title>Places</title>
+  <script type="text/javascript" src="./angular.min.js"></script>
+  <script type="text/javascript" src="./app.js"></script>
+  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyClGJDuUnPapo-qhzY6iT8aWgAS0MvD_VQ&libraries=places"></script>
+  <link rel="stylesheet" type="text/css" href="./styles.css" />
+</head>
+<body>
+  <div id="left-pane">
+    <div id="user-info" ng-controller="UserInfo as info">
+      <div id="user-photo">
+        <img ng-src="{{info.photo}}">
+      </div>
+      <div id="user-name">{{info.name}}</div>
+    </div>
+    <div id="user-map" ng-controller="UserMap as map">
+      <h2>Your map</h2>
+      <ul>
+        <li ng-repeat="place in map.places">{{place.name}}</li>
+      </ul>
+    </div>
+  </div>
+  <div id="center-pane" ng-controller="MapFrame as mapframe">
+    <div id="map-canvas"></div>
+    <div id="searchbox">
+      <input type="text" ng-model="query" ng-change="search()" />
+      <ul id="autocomplete" ng-show="completelist.length">
+        <li ng-repeat="place in completelist" ng-click="placeMarker(place)">{{place.name}} <span class="address">{{place.formatted_address}}</span></li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

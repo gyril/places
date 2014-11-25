@@ -1,0 +1,11 @@
+{
+  "name": "places",
+  "version": "0.0.1",
+  "description": "your places",
+  "dependencies": {
+    "body-parser": "1.6.3",
+    "express": "4.8.3",
+    "pg": "^3.4.2",
+    "q": "^1.0.1"
+  }
+}

@@ -1,0 +1,26 @@
+CREATE SCHEMA places;
+CREATE TABLE places.users (
+  id SERIAL PRIMARY KEY, 
+  email varchar, 
+  password varchar
+);
+CREATE TABLE places.locations (
+  id SERIAL PRIMARY KEY, 
+  title text,
+  address text,
+  coords text[][]
+);
+CREATE TABLE places.layers (
+  userid integer references places.users(id),
+  locationid integer references places.locations(id)
+);
+CREATE TABLE places.comments (
+  userid integer references places.users(id),
+  locationid integer references places.locations(id),
+  comment text,
+  rating smallint
+);
+CREATE TABLE places.subscriptions (
+  followerid integer references places.users(id),
+  subscribedid integer references places.users(id)
+);
