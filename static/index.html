@@ -1,38 +1,20 @@
 <!DOCTYPE html>
-<html ng-app="Places">
+<html>
 <head>
   <meta charset="utf-8">
-  <title>Places</title>
-  <script type="text/javascript" src="./scripts/vendor/angular.min.js"></script>
-  <script type="text/javascript" src='./scripts/vendor/lodash.js'></script>
-  <script type="text/javascript" src='./scripts/vendor/angular-google-maps.js'></script>
-  <script type="text/javascript" src="./scripts/app.js"></script>
-  <link rel="stylesheet" type="text/css" href="./styles/styles.css" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>My Divshot Application</title>
+  
+  <style>
+    body{
+      font:500 14px/21px 'Helvetica Neue', Helvetica, Arials;
+      padding:40px;
+    }
+  </style>
+  
 </head>
 <body>
-  <div id="left-pane">
-    <div id="user-info" ng-controller="UserInfo as info">
-      <div id="user-photo">
-        <img ng-src="{{info.photo}}">
-      </div>
-      <div id="user-name">{{info.name}}</div>
-    </div>
-    <div id="user-map" ng-controller="UserMap as map">
-      <h2>Your map</h2>
-      <ul>
-        <li ng-repeat="place in map.places">{{place.name}}</li>
-      </ul>
-    </div>
-  </div>
-  <div id="center-pane" ng-controller="mapCtrl">
-    <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="options">
-    </ui-gmap-google-map>
-    <!-- <div id="searchbox">
-      <input type="text" ng-model="query" ng-change="search()" />
-      <ul id="autocomplete" ng-show="completelist.length">
-        <li ng-repeat="place in completelist" ng-click="placeMarker(place)">{{place.name}} <span class="address">{{place.formatted_address}}</span></li>
-      </ul>
-    </div> -->
-  </div>
+  <h1>Welcome to Divshot Hosting!</h1>
+  <p>Make something static!</p>
 </body>
 </html>

@@ -1,0 +1,1 @@
+window.Places = Ember.Application.create()

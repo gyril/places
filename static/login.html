@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Places</title>
+  <link rel="stylesheet" type="text/css" href="./styles/styles.css" />
+</head>
+<body>
+  <div class="background">
+    <div class="gradient">
+      <div id="login">
+        <h2>Places</h2>
+        <form id="form">
+          <fieldset>
+            <input type="text" name="email" id="email" placeholder="e-mail" />
+          </fieldset>
+          <fieldset>
+            <input type="password" name="password" id="password" placeholder="password" />
+          </fieldset>
+            <input type="submit" value="SIGN IN" />
+        </form>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+    var form = document.getElementById('form').addEventListener('submit', function (e) {
+      e.preventDefault()
+      var email = document.getElementById('email').value
+        , password = document.getElementById('password').value
+      
+      xhr('post', '/login', {email: email, password: password})
+    }, false)
+
+    function xhr (method, route, data) {
+      var req = new XMLHttpRequest()
+      req.withCredentials = true
+      req.open(method, 'http://airhost.com:9898' + route, true)
+
+      req.onload = function(e) {
+        if (this.status.toString()[0] == '2') {
+          window.location.href = 'http://airhost.com:3475/map.html'
+        } else {
+          console.log(this.status, this.responseText)
+        }
+      }
+
+      if (method == 'post') {
+        req.setRequestHeader('Content-Type', 'application/json;charset=UTF-8')
+        req.send(JSON.stringify(data))
+      } else {
+        req.send()
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,22 +1,27 @@
 CREATE SCHEMA places;
 CREATE TABLE places.users (
-  id SERIAL PRIMARY KEY, 
+  id SERIAL PRIMARY KEY,
+  name varchar,
   email varchar, 
-  password varchar
+  password varchar,
+  photo varchar
 );
 CREATE TABLE places.locations (
-  id SERIAL PRIMARY KEY, 
-  title text,
+  place_id text PRIMARY KEY,
+  name text,
+  website text,
+  phone text,
   address text,
   coords text[][]
 );
-CREATE TABLE places.layers (
+CREATE TABLE places.relations (
   userid integer references places.users(id),
-  locationid integer references places.locations(id)
+  placeid text references places.locations(place_id),
+  active boolean
 );
 CREATE TABLE places.comments (
   userid integer references places.users(id),
-  locationid integer references places.locations(id),
+  placeid text references places.locations(place_id),
   comment text,
   rating smallint
 );

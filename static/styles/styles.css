@@ -1,3 +1,5 @@
+@import url(http://fonts.googleapis.com/css?family=Sigmar+One|Imprima);
+
 html, body {
   height: 100%;
 }
@@ -11,87 +13,242 @@ body {
   background-image: white;
 }
 
+h1, h2, h3 {
+  margin-top: 0;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+fieldset {
+  padding: 0;
+  border: none;
+}
+
+.background {
+  height: 100%;
+  background-image: url('../assets/background-nb.jpeg');
+  background-size: 100%;
+}
+
+.gradient {
+  height: 100%;
+  background-image: linear-gradient(0deg,rgba(3, 101, 192, 0.7),rgba(81, 167, 249, 0.7) 90%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#login {
+  width: 300px;
+  background: white;
+  padding: 20px;
+  border-radius: 2px;
+  box-shadow: -0px 1px 2px 0px #111111;
+  text-align: center;
+  color: orange;
+}
+
+#login h2 {
+  font: 36px "Sigmar One";
+  text-shadow: 0 1px 0px black;
+}
+
+#login input[type=text], #login input[type=password] {
+  height: 25px;
+  border: none;
+  border-radius: 2px;
+  width: 180px;
+  padding: 5px 10px;
+  font-size: 14px;
+  outline: none;
+  background: rgb(74, 74, 74);
+  color: white;
+}
+
+#login input#email {
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  margin-bottom: 1px;
+}
+
+#login input#password {
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  margin-top: 1px;
+}
+
+#login input[type=submit] {
+  margin-top: 20px;
+  border: 0;
+  background: #2196F3;
+  color: white;
+  padding: 10px 20px;
+  font-size: 14px;
+  border-radius: 2px;
+  box-shadow: 0 1px 0px 0px rgb(17, 40, 61), 0 -1px 0px 0px #66B3F0;
+  cursor: pointer;
+}
+
 #left-pane {
   box-sizing: border-box;
   position: relative;
   z-index: 1;
   height: 100%;
-  width: 280px;
-  padding: 10px;
-  background-color: rgba(255, 255, 255, 0.15);
+  overflow-y: scroll;
+  width: 20%;
+  background-color: #164F86;
   float: left;
-  box-shadow: 0 0 10px 0px black;
+  box-shadow: 0 1px 2px 0px #111111;
+  font-family: Lato;
+  font-weight: 300;
+  color: white;
 }
 
 #user-info {
-  height: 50px;
-  line-height: 50px;
-}
-
-#user-photo {
-  float: left;
-  margin-right: 10px;
+  padding: 10px;
+  text-align: center;
+  font: 24px "Bree Serif";
+  -webkit-font-smoothing: antialiased;
 }
 
 #user-photo > img {
   box-sizing: border-box;
-  width: 50px;
-  height: 50px;
-  border: 1px solid black;
-  border-radius: 30px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50px;
+  box-shadow: 0 1px 4px 0 #333333;
+}
+
+#others {
+  text-align: center;
+  margin: 10px 0 40px 0;
+}
+
+#others #search-people {
+  width: 60%;
+  height: 25px;
+  border: none;
+  border-radius: 15px;
+  padding: 0 10px 0 30px;
+  background: #E6E6E6;
+  outline: none;
+  box-shadow: 0 1px 0px 0px black inset, 0 1px 0px 0px white;
+}
+
+#others #search-people::-webkit-input-placeholder { /* WebKit browsers */
+  color: rgb(74, 74, 74);
+}
+
+#places-list {
+  
+}
+
+#places-list li:nth-child(1) {
+  border-top: 1px solid lightgrey;
+}
+
+#places-list li {
+  padding: 10px;
+  border-bottom: 1px solid lightgrey;
+  cursor: pointer;
+}
+
+#places-list li.active {
+  background-color: #51A7F9;
+}
+
+#user-map {
+  margin-top: 20px;
 }
 
 #center-pane {
   position: relative;
   float: left;
-  width: 1156px;
+  width: 80%;
   height: 100%;
 }
 
-#searchbox {
-  position: absolute;
-  top: 20px;
-  left: 40px;
+#map-canvas {
+  height: 100%;
 }
 
-#searchbox input[type="text"] {
-  width: 20em;
+#pac-input {
+  width: 300px;
+  line-height: 30px;
+  font-size: 14px;
+  margin: 10px 20px;
+  padding: 3px 10px;
+  border-radius: 2px;
   border: 0;
-  box-shadow: 0px 1px 5px -1px black;
-  padding: 10px;
+  box-shadow: 0px 1px 2px 0 #111111;
   outline: none;
-  font-size: 18px;
-  border-radius: 5px;
+  background: #164F86;
+  color: white;
 }
 
-#autocomplete {
-  background: white;
-  margin: 0;
-  padding: 10px 30px;
-  list-style: none;
+#pac-input::-webkit-input-placeholder { /* WebKit browsers */
+  color: lightgrey;
+}
+
+#pac-input:focus {
+  /*box-shadow: 0 0 0 1px lightgrey, 0px 1px 3px 0 black;*/
+}
+
+#add-custom {
+  position: absolute;
+  z-index: 1;
+  margin: 10px 350px;
+  height: 36px;
+  width: 36px;
+  border: none;
+  border-radius: 2px;
+  background: #164F86;
+  box-shadow: 0 1px 2px 0 #111111;
+  color: white;
+  cursor: pointer;
+  outline: none;
+}
+
+#map-modal {
+  position: absolute;
+  right: 0;
+  height: 100%;
+  z-index: 1;
+  background-color: #164F86;
+  box-shadow: 0 1px 2px 0px #111111;
+  padding: 20px;
+  font-family: "Open Sans";
+  width: 300px;
+  box-sizing: border-box;
+  display: none;
+  color: white;
+}
+
+.closer {
+  text-align: right;
+  font-family: Arial;
+  cursor: pointer;
+}
+
+.remover {
+  text-transform: uppercase;
+  background-color: #F39019;
+  text-align: center;
+  border: 0;
+  border-radius: 2px;
+  padding: 10px 20px;
+  color: white;
+  font-size: 14px;
+  margin: 0 auto;
+  display: block;
+  box-shadow: 0 1px 2px #111111;
+  cursor: pointer;
 }
 
 .address {
   font-size: 0.9em;
   color: #999999;
-}
-
-.add {
-  border: 1px solid black;
-  text-align: center;
-  width: 4em;
-  margin: 0px auto;
-  cursor: pointer;
-  border-radius: 3px;
-  box-shadow: 0px 2px 2px 0px;
-}
-
-.angular-google-map {
-  height: 100%;
-}
-
-.angular-google-map-container { 
-  height: 100%;
-  margin: 0;
-  padding: 0;
 }

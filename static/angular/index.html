@@ -1,0 +1,45 @@
+<html ng-app="placesApp">
+<head>
+  <title>Places</title>
+  <link rel="stylesheet" type="text/css" href="./assets/css/styles.css">
+  <script src="./assets/libs/angular.min.js"></script>
+  <script src='./assets/libs/lodash.js'></script>
+  <script src='./assets/libs/angular-google-maps.js'></script>
+  <script src="./app/app.module.js"></script>
+  <script src="./app/shared/domains.js"></script>
+  <script src="./app/shared/dropdowns.js"></script>
+  <script src="./app/shared/user.js"></script>
+  <script src="./app/components/people_search.js"></script>
+  <script src="./app/components/map.js"></script>
+</head>
+<body>
+  <div dropdown ng-show="dropdownService.current" class="dropdown" style="top: {{ dropdownService.current.anchor.top + 'px' }}; left: {{ dropdownService.current.anchor.left + 'px' }};">
+    <ul>
+      <li ng-repeat="item in dropdownService.current.items" ng-click="dropdownService.select(item)">
+        {{ item.name }}
+      </li>
+    </ul>
+  </div>
+  <div class="leftbar">
+    <div ng-controller="User as user" ng-show="user.me" ng-cloak>
+      <img ng-src="./assets/img/{{ user.me.photo }}" />
+      <div>{{ user.me.name }}</div>
+      <input type="text" people-search>
+      <ul>
+        <li ng-repeat="place in user.me.places" ng-click="user.showPlace(place)"/>
+          {{ place.name }}
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="map" ng-controller="Map as map">
+    <ui-gmap-google-map center="map.center" zoom="map.zoom" control="map.control" options="map.options" events="map.events">
+      <ui-gmap-search-box template="map.searchbox.template" events="map.searchbox.events" options="map.searchbox.options"></ui-gmap-search-box>
+      <ui-gmap-markers
+        models="map.places"
+        coords="'self'">
+      </ui-gmap-markers>
+    </ui-gmap-google-map>
+  </div>
+</body>
+</html>

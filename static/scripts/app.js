@@ -33,8 +33,8 @@
       disableDefaultUI: true,
       zoomControl: true,
       zoomControlOptions: {
-        style: "SMALL",
-        position: "RIGHT_BOTTOM"
+        style: google.maps.ZoomControlStyle.SMALL,
+        position: google.maps.ControlPosition.RIGHT_BOTTOM
       }
     }
 

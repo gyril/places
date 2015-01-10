@@ -1,0 +1,26 @@
+html {
+  
+}
+
+body {
+  
+}
+
+.dropdown {
+  background-color: white;
+  position: absolute; 
+}
+
+.leftbar {
+  float: left;
+  width: 20%;
+}
+
+.map {
+  float: left;
+  width: 80%;
+}
+
+.angular-google-map-container { 
+  height: 100%; 
+}
