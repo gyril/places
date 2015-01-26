@@ -1,0 +1,7 @@
+{spawn, exec} = require 'child_process'
+fs = require 'fs'
+
+task "build", "build the source", ->
+	compiler = spawn 'coffee', ['-c', '.']
+	compiler.stdout.on 'data', (data) -> console.log data.toString().trim()
+	compiler.stderr.on 'data', (data) -> console.error data.toString().trim()

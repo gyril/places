@@ -44,14 +44,41 @@ function userService ($http, $q, domains) {
   }
 
   self.getUserPlaces = function (id) {
+    return promisedRoute('get', '/relations/' + id, function (results) {
+      if (results.message === 'OK')
+        self.me.places.push(place)
+    })
+  }
+
+  self.addRelation = function (place) {
+    return promisedRoute('post', '/relation/add', {place: place}, function (results) {
+      if (results.message === 'OK')
+        self.me.places.push(place)
+    })
+  }
+
+  self.removeRelation = function (place) {
+    return promisedRoute('post', '/relation/remove', {place: place}, function (results) {
+      if (results.message === 'OK')
+        self.me.places.splice(self.me.places.indexOf(place), 1)
+    })
+  }
+
+  function promisedRoute (method, route, data, done) {
+    if (typeof data === 'function') {
+      done = data
+      data = null
+    }
+
     var deferred = $q.defer()
 
-    $http.get(domains.api.protocol + domains.api.domain + '/relations/' + id)
-      .success(function (data) {
-        deferred.resolve(data)
+    $http[method](domains.api.protocol + domains.api.domain + route, data)
+      .success(function (results) {
+        done(results)
+        deferred.resolve(results)
       })
-      .error(function (data, status) {
-        console.log(status, data)
+      .error(function (results, status) {
+        console.log(status, results)
       })
 
     return deferred.promise

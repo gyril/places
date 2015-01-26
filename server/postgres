@@ -7,21 +7,22 @@ CREATE TABLE places.users (
   photo varchar
 );
 CREATE TABLE places.locations (
-  place_id text PRIMARY KEY,
+  id text PRIMARY KEY,
   name text,
   website text,
   phone text,
   address text,
-  coords text[][]
+  latitude text,
+  longitude text
 );
 CREATE TABLE places.relations (
   userid integer references places.users(id),
-  placeid text references places.locations(place_id),
+  placeid text references places.locations(id),
   active boolean
 );
 CREATE TABLE places.comments (
   userid integer references places.users(id),
-  placeid text references places.locations(place_id),
+  placeid text references places.locations(id),
   comment text,
   rating smallint
 );

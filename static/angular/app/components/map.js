@@ -4,19 +4,45 @@ angular.module('placesApp')
 function Map ($scope, uiGmapGoogleMapApi, mapService, userService) {
   var map = this
 
+  map.currentMarker = { id: 0 }
+
+
   map.mapService = mapService
   map.searchbox = { 
     template: './templates/searchbox.tpl.html', 
     events: { places_changed: function (searchbox) {
-        var place = searchbox.getPlaces()[0]
-        mapService.showPlace(place)
+        var location = searchbox.getPlaces()[0]
+        mapService.showPlace(new googleLocationToPlace(location))
       }
     }, 
     options: {}
   }
 
+  map.addCurrentRelation = function () {
+    userService.addRelation(map.mapService.currentPlace).then(function (data) {
+      if (data.message === "OK")
+        map.mapService.hidePlace()
+    })
+  }
+
+  map.removeCurrentRelation = function () {
+    userService.removeRelation(map.mapService.currentPlace).then(function (data) {
+      if (data.message === "OK")
+        map.mapService.hidePlace()
+    })
+  }
+
   $scope.$watch('map.mapService.currentPlace', function (place) {
+    map.currentPlace = place
+    
     if (place) {
+      map.currentMarker = {
+        coords: {
+          latitude: place.latitude,
+          longitude: place.longitude
+        }
+      }
+      map.currentPlace.added = ( _.find(map.places, function (item) { return _.contains(item, place.id) }) ) ? true : false
       map.zoom = 17
       map.center = { latitude: place.latitude, longitude: place.longitude }
     }
@@ -45,16 +71,23 @@ function Map ($scope, uiGmapGoogleMapApi, mapService, userService) {
       }
     }
 
-    userService.getCurrentUserInfo().then(function (data) {
-      map.places = _(data.places).map(function (place) {
-          place.latitude = place.coords[0]
-          place.longitude = place.coords[1]
-          place.id = place.place_id
-
-          return place
-        }).value()
-    })
+    map.places = userService.me.places
   })
+
+  function googleLocationToPlace (obj) {
+    this.id = obj.place_id
+    this.name = obj.name
+    this.address = [
+        (obj.address_components[0] && obj.address_components[0].short_name || ''),
+        (obj.address_components[1] && obj.address_components[1].short_name || ''),
+        (obj.address_components[2] && obj.address_components[2].short_name || '')
+      ].join(' ')
+    var coords = obj.geometry.location.toUrlValue().split(",")
+    this.latitude = coords[0]
+    this.longitude = coords[1]
+    this.phone = obj.international_phone_number
+    this.website = obj.website
+  }
 }
 
 angular.module('placesApp')

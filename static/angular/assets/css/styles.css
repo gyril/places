@@ -6,6 +6,10 @@ body {
   
 }
 
+a {
+  cursor: pointer;
+}
+
 .dropdown {
   background-color: white;
   position: absolute; 
@@ -17,10 +21,18 @@ body {
 }
 
 .map {
+  position: relative;
   float: left;
   width: 80%;
 }
 
 .angular-google-map-container { 
   height: 100%; 
+}
+
+#place {
+  position: absolute;
+  background: white;
+  top: 0px;
+  right: 0px;
 }

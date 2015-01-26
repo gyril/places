@@ -27,7 +27,7 @@
       <input type="text" people-search>
       <ul>
         <li ng-repeat="place in user.me.places" ng-click="user.showPlace(place)"/>
-          {{ place.name }}
+          <a>{{ place.name }}</a>
         </li>
       </ul>
     </div>
@@ -37,9 +37,28 @@
       <ui-gmap-search-box template="map.searchbox.template" events="map.searchbox.events" options="map.searchbox.options"></ui-gmap-search-box>
       <ui-gmap-markers
         models="map.places"
-        coords="'self'">
+        coords="'self'"
+        icon="icon">
       </ui-gmap-markers>
+      <ui-gmap-marker
+        idKey="map.currentMarker.id"
+        coords="map.currentMarker.coords"
+        icon="'https://mts.googleapis.com/vt/icon/name=icons/spotlight/spotlight-waypoint-a.png'"
+        >
+</ui-gmap-marker>
     </ui-gmap-google-map>
+    <div id="place" ng-show="map.currentPlace">
+      <h3 class="place-name">{{ map.currentPlace.name }}</h3>
+      <div class="place-contacts">
+        <span class="place-phone">{{ map.currentPlace.phone }}</span> <a class="place-website" href="{{ map.currentPlace.website }}" target="_blank">website</a></span>
+      </div>
+      <div class="place-address">{{ map.currentPlace.address }}</div>
+      <div class="place-relation">
+        <button ng-click="map.removeCurrentRelation()" ng-show="map.currentPlace.added">Remove from my map</button>
+        <button ng-click="map.addCurrentRelation()" ng-hide="map.currentPlace.added">Add to my map</button>
+      </div>
+      <div><a ng-click="map.mapService.hidePlace()">close</a></div>
+    </div>
   </div>
 </body>
 </html>
