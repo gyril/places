@@ -1,7 +1,7 @@
 {
   "local": {
-    "STATIC": "http://airhost.com:3475",
     "PORT": 9898,
-    "POSTGRES": "postgres://postgres:postpass@localhost/postgres"
+    "POSTGRES": "postgres://postgres:postpass@localhost/postgres",
+    "DOMAIN": "http://airhost.com:9898"
   }
 }

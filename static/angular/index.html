@@ -30,7 +30,7 @@
           <div class="people-search-label">Find a friend</div>
           <input type="text" class="people-search-input" people-search>
         </div>
-        <img ng-src="{{display.user.photo}}" class="profile-picture" ng-click="display.toggleLeftbar()" />
+        <div style="background-image: url({{display.user.photo}})" class="profile-picture" ng-click="display.toggleLeftbar()"></div>
         <div class="profile-name">{{ display.user.name }}</div>
         <ul class="places-list">
           <li ng-repeat="place in display.user.places" ng-click="display.showPlace(place)"/>
