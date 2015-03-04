@@ -9,6 +9,7 @@ var path = require('path')
   , session = require('express-session')
   , passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy
+  , FacebookStrategy = require('passport-facebook').Strategy
   , sql = require('./sql')
   , port = Number(process.env.PORT || config.local.PORT)
 
@@ -20,6 +21,25 @@ passport.use('local', new LocalStrategy({
     sql.auth(email, password, done)
   }
 ))
+
+passport.use(new FacebookStrategy({
+    clientID: "346135978909744",
+    clientSecret: "38d4304faea16f2ec4747d39e8ed2422",
+    callbackURL: "http://airhost.com:9898/facebook",
+    profileFields: ['id', 'displayName','picture.type(large)', 'emails']
+  },
+  function(accessToken, refreshToken, profile, done) {
+    sql.fbAuth(profile, function (err, results) {
+      if (err)
+        return done(err)
+
+      if (results)
+        return done(null, results)
+
+      sql.fbAddUser(profile, done)
+    })
+  }
+));
 
 passport.serializeUser(function (user, done) {
   done(null, {id: user.id})

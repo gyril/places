@@ -20,6 +20,41 @@ this.auth = function (email, password, done) {
   })
 }
 
+this.fbAuth = function (profile, done) {
+  var id = profile.id
+
+  pgq.connect()
+  .then(function () {
+    return pgq.client.query('SELECT * FROM places.users WHERE fbid=$1', [id])
+  })
+  .then(function (data) {
+    pgq.client.done()
+    if (data.rows.length == 0) { return done(null, false) }
+    return done(null, data.rows[0])
+  })
+  .fail(function (error) {
+    return done(error)
+  })
+}
+
+this.fbAddUser = function (profile, done) {
+  var fbid = profile.id
+    , name = profile.displayName
+    , photo = profile.photos[0].value
+    
+  pgq.connect()
+  .then(function () {
+    return pgq.client.query('INSERT INTO places.users (fbid, name, photo) VALUES ($1, $2, $3) RETURNING *', [fbid, name, photo])
+  })
+  .then(function (data) {
+    pgq.client.done()
+    return done(null, data.rows[0])
+  })
+  .fail(function (error) {
+    return done(error)
+  })
+}
+
 this.addUser = function (email, password, name, done) {
   pgq.connect()
   .then(function () {

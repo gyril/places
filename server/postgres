@@ -1,6 +1,7 @@
 CREATE SCHEMA places;
 CREATE TABLE places.users (
   id SERIAL PRIMARY KEY,
+  fbid varchar,
   name varchar,
   email varchar, 
   password varchar,

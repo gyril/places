@@ -5,5 +5,5 @@ angular.module('placesApp')
 function domains () {
   var self = this
 
-  self.api = { domain: "places-1.herokuapp.com", protocol: "http://" }
+  self.api = { domain: window.location.host, protocol: window.location.protocol+"//" }
 }

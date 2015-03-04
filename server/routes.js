@@ -15,12 +15,21 @@ exports.mount = function (app) {
     successRedirect: '/angular/'
   }))
 
+  app.get('/auth/facebook', passport.authenticate('facebook'))
+  app.get('/facebook', passport.authenticate('facebook', { 
+    successRedirect: '/angular/',
+    failureRedirect: '/'
+  }))
+
   app.post('/signup', function (req, res) {
     console.log(req.body)
     if (req.body.password !== req.body.passwordConfirm || req.body.password.length === 0 || req.body.name.length === 0 || req.body.email.length === 0)
       return res.redirect('/')
 
     sql.addUser(req.body.email, req.body.password, req.body.name, function (err, results) {
+      if (err)
+        return console.log(err)
+
       console.log('created user with id:', results)
       res.redirect('/')
     })

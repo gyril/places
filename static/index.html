@@ -10,6 +10,11 @@
     <div class="gradient">
       <div id="login">
         <div id="logo">Places</div>
+        <div style="margin-top: 200px;">
+          <a class="button" href="/facebook">Login with Facebook</a>
+        </div>
+      </div>
+      <!--
         <form id="form" class="padded-form" method="post" action="/login">
           <fieldset>
             <input type="text" name="email" id="email" placeholder="e-mail" />
@@ -36,25 +41,25 @@
           <input class="create" type="submit" value="CREATE ACCOUNT" />
           <div id="back" onclick="toLogin()"><</div>
         </form>
-      </div>
+       -->
     </div>
   </div>
   <script type="text/javascript">
-    function toSignup () {
-      var form = document.getElementById('form'),
-          signup = document.getElementById('signup');
+    // function toSignup () {
+    //   var form = document.getElementById('form'),
+    //       signup = document.getElementById('signup');
 
-      form.style.display = 'none';
-      signup.style.display = 'block';
-    }
+    //   form.style.display = 'none';
+    //   signup.style.display = 'block';
+    // }
 
-    function toLogin () {
-      var form = document.getElementById('form'),
-          signup = document.getElementById('signup');
+    // function toLogin () {
+    //   var form = document.getElementById('form'),
+    //       signup = document.getElementById('signup');
 
-      form.style.display = 'block';
-      signup.style.display = 'none';
-    }
+    //   form.style.display = 'block';
+    //   signup.style.display = 'none';
+    // }
   </script>
 </body>
 </html>
