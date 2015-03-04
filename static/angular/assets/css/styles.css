@@ -36,7 +36,7 @@ a {
   position: absolute;
   z-index: 1;
   height: 100%;
-  background: linear-gradient(to bottom, #4B5DAC 0%, #A8CFD8 100%);
+  background: linear-gradient(to bottom, #4B5DAC 0%, rgba(168, 207, 216, .9) 100%);
   color: white;
   font: 18px "Open Sans";
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .5);
@@ -137,7 +137,7 @@ a {
   position: absolute;
   top: 0px;
   height: 100%;
-  background: linear-gradient(to bottom, #4B5DAC 0%, #A8CFD8 100%);
+  background: linear-gradient(to bottom, #4B5DAC 0%, rgba(168, 207, 216, .9) 100%);
   color: white;
   font: 18px "Open Sans";
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .5);
