@@ -11,13 +11,24 @@ var pg = require('pg')
 
 exports.mount = function (app) {
   app.post('/login', passport.authenticate('local', { 
-    failureRedirect: '/login.html',
+    failureRedirect: '/',
     successRedirect: '/angular/'
   }))
 
+  app.post('/signup', function (req, res) {
+    console.log(req.body)
+    if (req.body.password !== req.body.passwordConfirm || req.body.password.length === 0 || req.body.name.length === 0 || req.body.email.length === 0)
+      return res.redirect('/')
+
+    sql.addUser(req.body.email, req.body.password, req.body.name, function (err, results) {
+      console.log('created user with id:', results)
+      res.redirect('/')
+    })
+  })
+
   app.get('/me', function (req, res) {
     if (!req.user) {
-      res.redirect('401').send({message: 'Unauthorized'})
+      res.status('401').send({message: 'Unauthorized'})
     } else {
       sql.fetchPlacesFromUser(req.user.id, function (err, results) {
         if (err)
@@ -29,6 +40,25 @@ exports.mount = function (app) {
         res.send(user)
       })
     }
+  })
+
+  app.get('/info/:userid', function (req, res) {
+    async.series({
+      fetchUser: function (done) {
+        sql.fetchUser(req.params.userid, done)
+      },
+      fetchPlacesFromUser: function (done) {
+        sql.fetchPlacesFromUser(req.params.userid, done)
+      }
+    }, function (err, results) {
+      if (err)
+        return console.log(err)
+
+      var user = _.omit(results.fetchUser, 'password')
+      user.places = results.fetchPlacesFromUser
+
+      res.send(user)
+    })
   })
 
   app.get('/relations/:userid', function (req, res) {

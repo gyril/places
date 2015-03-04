@@ -18,17 +18,21 @@ function Map ($scope, uiGmapGoogleMapApi, mapService, userService) {
     options: {}
   }
 
+  map.showPlace = function (item) {
+    mapService.showPlace(item.model)
+  }
+
   map.addCurrentRelation = function () {
     userService.addRelation(map.mapService.currentPlace).then(function (data) {
       if (data.message === "OK")
-        map.mapService.hidePlace()
+        mapService.hidePlace()
     })
   }
 
   map.removeCurrentRelation = function () {
     userService.removeRelation(map.mapService.currentPlace).then(function (data) {
       if (data.message === "OK")
-        map.mapService.hidePlace()
+        mapService.hidePlace()
     })
   }
 
@@ -42,9 +46,14 @@ function Map ($scope, uiGmapGoogleMapApi, mapService, userService) {
           longitude: place.longitude
         }
       }
-      map.currentPlace.added = ( _.find(map.places, function (item) { return _.contains(item, place.id) }) ) ? true : false
+
+      userService.getCurrentUserInfo().then(function (data) {
+        map.currentPlace.added = ( _.find(data.places, function (item) { return _.contains(item, place.id) }) ) ? true : false
+      })
       map.zoom = 17
       map.center = { latitude: place.latitude, longitude: place.longitude }
+    } else {
+      map.currentMarker = { id: 0 }
     }
   })
   
@@ -70,8 +79,6 @@ function Map ($scope, uiGmapGoogleMapApi, mapService, userService) {
         map.searchbox.options.bounds = new maps.LatLngBounds(sw, ne)
       }
     }
-
-    map.places = userService.me.places
   })
 
   function googleLocationToPlace (obj) {
@@ -96,6 +103,7 @@ angular.module('placesApp')
 function mapService () {
   var self = this
 
+  self.places = []
   self.currentPlace = null
 
   self.showPlace = function (place) {
@@ -104,5 +112,10 @@ function mapService () {
 
   self.hidePlace = function () {
     self.currentPlace = null
+  }
+
+  self.togglePlace = function () {
+    if (self.currentPlace !== null)
+      self.hidePlace()
   }
 }

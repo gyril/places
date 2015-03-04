@@ -4,7 +4,7 @@ CREATE TABLE places.users (
   name varchar,
   email varchar, 
   password varchar,
-  photo varchar
+  photo varchar DEFAULT 'default.png'
 );
 CREATE TABLE places.locations (
   id text PRIMARY KEY,

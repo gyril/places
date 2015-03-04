@@ -1,0 +1,26 @@
+<ion-view view-title="Map">
+  <ion-content class="padding">
+    <ion-pane style="height: 480px;">
+      <ui-gmap-google-map center="map.center" zoom="map.zoom" control="map.control" options="map.options" events="map.events">
+      </ui-gmap-google-map>
+    </ion-pane>
+  </ion-content>
+  <ion-content class="padding" style="margin-top: 480px">
+    <div class="list list-inset">
+      <label class="item item-input">
+        <i class="icon ion-search placeholder-icon"></i>
+        <input type="text" placeholder="Search">
+      </label>
+    </div>
+    <!--<div class="list card">
+      <div class="item item-divider">{{ map.user.name }}</div>
+      <div class="item item-body">
+        <ul>
+          <li ng-repeat="place in map.user.places">
+            {{place.name}}
+          </li>
+        </ul>
+      </div>
+    </div>-->
+  </ion-content>
+</ion-view>

@@ -41,14 +41,18 @@ fieldset {
   justify-content: center;
 }
 
+#logo {
+  color: transparent;
+  background-image: url('../assets/logo.png');
+  background-repeat: no-repeat;
+  background-position-x: 50%;
+  height: 126px;
+}
+
 #login {
-  width: 300px;
-  background: white;
+  width: 640px;
   padding: 20px;
-  border-radius: 2px;
-  box-shadow: -0px 1px 2px 0px #111111;
   text-align: center;
-  color: orange;
 }
 
 #login h2 {
@@ -56,41 +60,78 @@ fieldset {
   text-shadow: 0 1px 0px black;
 }
 
+#login form {
+  margin-top: 50px;
+}
+
 #login input[type=text], #login input[type=password] {
   height: 25px;
   border: none;
-  border-radius: 2px;
-  width: 180px;
-  padding: 5px 10px;
-  font-size: 14px;
+  border-bottom: 2px solid #d1d1d1;
+  width: 360px;
+  padding: 10px 0px;
+  font-size: 28px;
   outline: none;
-  background: rgb(74, 74, 74);
+  background: transparent;
   color: white;
+  margin-bottom: 20px;
 }
 
-#login input#email {
-  border-bottom-left-radius: 0px;
-  border-bottom-right-radius: 0px;
-  margin-bottom: 1px;
+#login input[type=text]::-webkit-input-placeholder, #login input[type=password]::-webkit-input-placeholder { /* WebKit browsers */
+  color: #d1d1d1;
+  font-weight: 100;
 }
 
-#login input#password {
-  border-top-left-radius: 0px;
-  border-top-right-radius: 0px;
-  margin-top: 1px;
-}
-
-#login input[type=submit] {
-  margin-top: 20px;
-  border: 0;
-  background: #2196F3;
+#login input[type=text]:focus, #login input[type=password]:focus { /* WebKit browsers */
   color: white;
+  border-color: white;
+}
+
+#login input[type=submit], #login input[type=button] {
+  margin: 20px;
   padding: 10px 20px;
-  font-size: 14px;
   border-radius: 2px;
-  box-shadow: 0 1px 0px 0px rgb(17, 40, 61), 0 -1px 0px 0px #66B3F0;
+  box-shadow: 0 2px 3px 0px rgba(0, 0, 0, .5), 0 2px 3px 0px rgba(0, 0, 0, .5) inset;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, .5);
   cursor: pointer;
+  width: 160px;
+  height: 60px;
+  font-size: 24px;
+  color: white;
+  background-color: transparent;
+  border: 2px solid white;
 }
+
+#login input[type=submit].login, #login input[type=submit].create {
+  box-shadow: 0 2px 3px 0px rgba(0, 0, 0, .5);
+  text-shadow: none;
+  background: white;
+  color: rgb(45, 112, 175);
+}
+
+#login input[type=submit].create {
+  width: 360px;
+}
+
+#login form.padded-form {
+  margin-top: 184px;
+}
+
+#login #signup {
+  display: none;
+}
+
+#back {
+  position: fixed;
+  top: 50px;
+  left: 50px; 
+  cursor: pointer;
+  color: white;
+  font-size: 48px;
+}
+
+
+/* deprecated */
 
 #left-pane {
   box-sizing: border-box;

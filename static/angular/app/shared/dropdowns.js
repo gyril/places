@@ -7,11 +7,12 @@ function dropdownService () {
 
   self.current = null
 
-  self.open = function (name, items, anchor) {
+  self.open = function (name, items, anchor, handler) {
     self.current = {
       name: name,
       items: items,
-      anchor: anchor
+      anchor: anchor,
+      handler: handler
     }
   }
 
@@ -20,7 +21,7 @@ function dropdownService () {
   }
 
   self.select = function (item) {
-    console.log(item)
+    self.current.handler(item)
   }
 }
 

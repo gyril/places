@@ -1,9 +1,6 @@
-html {
-  
-}
-
-body {
-  
+html, body {
+  padding: 0;
+  margin: 0; 
 }
 
 a {
@@ -11,19 +8,125 @@ a {
 }
 
 .dropdown {
-  background-color: white;
-  position: absolute; 
+  background-color: rgba(0, 0, 0, .8);
+  position: absolute;
+  z-index: 2;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .5);
+  width: 260px;
+  color: white;
+  font: 18px "Open Sans";
+  font-weight: 100;
+}
+
+.dropdown ul {
+  list-style: none;
+  padding: 0px;
+}
+
+.dropdown ul li {
+  padding: 5px 20px;
+  cursor: pointer;
+}
+
+.dropdown ul li:hover, .dropdown ul li:active {
+  background-color: rgba(255, 255, 255, .3);
 }
 
 .leftbar {
-  float: left;
-  width: 20%;
+  position: absolute;
+  z-index: 1;
+  height: 100%;
+  background: linear-gradient(to bottom, #4B5DAC 0%, #A8CFD8 100%);
+  color: white;
+  font: 18px "Open Sans";
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .5);
+  width: 300px;
+  left: -300px;
+  transition: left .2s ease-out;
+}
+
+.leftbar.open {
+  left: 0px;
+}
+
+.people-search, .place-search {
+  position: relative;
+  left: 20px;
+  top: 30px;
+  width: 260px;
+}
+
+.people-search-label, .place-search-label {
+  position: absolute;
+  top: -20px;
+  font-size: .9rem;
+  font-weight: 100;
+}
+
+.people-search-input, .place-search-input {
+  line-height: 30px;
+  width: 100%;
+  border: 0;
+  border-bottom: 2px solid #e1e1e1;
+  background: transparent;
+  color: white;
+  font-size: 1rem;
+}
+
+.people-search-input:focus, .place-search-input:focus {
+  outline: none;
+  border-bottom: 2px solid #ffffff;
+}
+
+.profile-picture, .place-picture {
+  position: absolute;
+  right: -75px;
+  top: 70px;
+  box-shadow: 2px 2px 4px -2px rgba(0, 0, 0, .5);
+  border-radius: 70px;
+  cursor: pointer;
+}
+
+.place-picture {
+  right: 0;
+  left: -75px;
+  width: 140px;
+  height: 140px;
+  background-color: #4A90E2;
+  box-shadow: -2px 2px 4px -2px rgba(0, 0, 0, .5);
+  color: white;
+  font-size: 100px;
+  text-align: center;
+  transition: transform .2s ease-out;
+}
+
+.place-picture.tilted {
+  transform: rotate(45deg);
+}
+
+.profile-name {
+  position: absolute;
+  top: 125px;
+  right: 80px;
+  font-size: 1.5rem;
+}
+
+.places-list {
+  list-style: none;
+  margin-top: 180px;
+  padding: 0 20px;
+  height: 65%;
+  overflow: scroll;
+}
+
+.places-list li a {
+  display: block;
+  padding: 20px 0;
+  border-bottom: 1px solid white;
 }
 
 .map {
-  position: relative;
-  float: left;
-  width: 80%;
+  width: 100%;
 }
 
 .angular-google-map-container { 
@@ -32,7 +135,86 @@ a {
 
 #place {
   position: absolute;
-  background: white;
   top: 0px;
+  height: 100%;
+  background: linear-gradient(to bottom, #4B5DAC 0%, #A8CFD8 100%);
+  color: white;
+  font: 18px "Open Sans";
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .5);
+  width: 300px;
+  right: -300px;
+  transition: right .2s ease-out;
+}
+
+#place.open {
   right: 0px;
+}
+
+.place-name {
+  position: relative;
+  left: 80px;
+  top: 70px;
+}
+
+.place-address {
+  position: relative;
+  left: 20px;
+  top: 120px;
+}
+
+.place-contacts {
+  position: relative;
+  left: 20px;
+  top: 150px;
+}
+
+.place-contacts a {
+  color: white;
+}
+
+.place-relation {
+  position: relative;
+  left: 20px;
+  top: 180px;
+}
+
+.place-relation button {
+  height: 60px;
+  border: 2px solid white;
+  background-color: transparent;
+  width: 260px;
+  border-radius: 2px;
+  box-shadow: 0 2px 4px 0px rgba(0, 0, 0, .5), 0 2px 4px 0px rgba(0, 0, 0, .5) inset;
+  color: white;
+  font-size: 1.2rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, .5);
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.place-relation button.add {
+  background-color: white;
+  color: rgb(123, 152, 195);
+  box-shadow: 0 2px 4px 0px rgba(0, 0, 0, .5);
+  text-shadow: none;
+}
+
+#searchbox {
+  right: 100px;
+  top: 20px!important;
+  left: initial!important;
+  width: 260px;
+  line-height: 30px;
+  border: none;
+  border-bottom: 2px solid white;
+  background: rgba(0, 0, 0, 0.28);
+  color: white;
+  padding: 5px 10px;
+  font-size: 18px;
+  outline: none;
+  box-shadow: 0 2px 4px 0 black;
+}
+
+#searchbox::-webkit-input-placeholder {
+  color: #e1e1e1;
 }

@@ -29,7 +29,7 @@ passport.deserializeUser(function (blob, done) {
   sql.fetchUser(blob.id, done)
 })
 
-app.disable('x-powered-by');
+app.disable('x-powered-by')
 app.use(cookieParser())
 app.use(session({
   secret: 'come at me break my secret bro',
@@ -39,6 +39,11 @@ app.use(session({
     httpOnly: false
   }
 }))
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*")
+  res.header("Access-Control-Allow-Headers", "X-Requested-With")
+  next()
+})
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(passport.initialize())

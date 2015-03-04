@@ -2,11 +2,19 @@ angular.module('placesApp')
   .directive('peopleSearch', peopleSearch)
 
 function peopleSearch (peopleService, dropdownService) {
+  function getOffset (t, el) { var s = 'offset'+t, o = el.prop(s); while (typeof el.parent().prop(s) !== 'undefined') { el = el.parent(); o += el.prop(s); }; return o }
+  
   return function (scope, element, attrs) {
     element.bind("keyup", function (event) {
+      window.a = element
       peopleService.search(element.val()).then(function (results) {
         if (results && results.length > 0)
-          dropdownService.open('people-search', results, {top: element.prop('offsetTop') + element.prop('offsetHeight'), left: element.prop('offsetLeft')})
+          dropdownService.open('people-search', results, 
+            {top: getOffset('Top', element) + element.prop('offsetHeight'), left: getOffset('Left', element)},
+            function (item) {
+              dropdownService.close()
+              peopleService.currentPeople = item.id
+            })
         else
           dropdownService.close()
       })
@@ -17,8 +25,10 @@ function peopleSearch (peopleService, dropdownService) {
 angular.module('placesApp')
   .service('peopleService', peopleService)
 
-function peopleService ($http, $q, domains) {
+function peopleService ($q, utils) {
   var self = this
+
+  self.currentPeople = null
 
   self.search = function (query) {
     var deferred = $q.defer()
@@ -27,14 +37,15 @@ function peopleService ($http, $q, domains) {
       return deferred.promise
     }
 
-    $http.get(domains.api.protocol + domains.api.domain + '/search/users/' + query)
-      .success(function (data) {
-        deferred.resolve(data)
-      })
-      .error(function (data, status) {
-        console.log(status, data)
-      })
+    return utils.promisedRoute('get', '/search/users/' + query, function (results) {})
+  }
 
-    return deferred.promise
+
+  self.getPeopleInfo = function (id) {
+    return utils.promisedRoute('get', '/info/' + id, function (results) {})
+  }
+
+  self.getPeoplePlaces = function (id) {
+    return utils.promisedRoute('get', '/relations/' + id, function (results) {})
   }
 }

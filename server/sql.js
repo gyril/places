@@ -20,6 +20,20 @@ this.auth = function (email, password, done) {
   })
 }
 
+this.addUser = function (email, password, name, done) {
+  pgq.connect()
+  .then(function () {
+    return pgq.client.query('INSERT INTO places.users (email, password, name) VALUES ($1, $2, $3) RETURNING id', [email, password, name])
+  })
+  .then(function (data) {
+    pgq.client.done()
+    return done(null, data.rows[0].id)
+  })
+  .fail(function (error) {
+    return done(error)
+  })
+}
+
 this.fetchUser = function (id, done) {
   pgq.connect()
   .then(function () {

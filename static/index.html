@@ -2,19 +2,59 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>My Divshot Application</title>
-  
-  <style>
-    body{
-      font:500 14px/21px 'Helvetica Neue', Helvetica, Arials;
-      padding:40px;
-    }
-  </style>
-  
+  <title>Places</title>
+  <link rel="stylesheet" type="text/css" href="./styles/styles.css" />
 </head>
 <body>
-  <h1>Welcome to Divshot Hosting!</h1>
-  <p>Make something static!</p>
+  <div class="background">
+    <div class="gradient">
+      <div id="login">
+        <div id="logo">Places</div>
+        <form id="form" class="padded-form" method="post" action="http://airhost.com:9898/login">
+          <fieldset>
+            <input type="text" name="email" id="email" placeholder="e-mail" />
+          </fieldset>
+          <fieldset>
+            <input type="password" name="password" id="password" placeholder="password" />
+          </fieldset>
+          <input type="button" value="SIGN UP" onclick="toSignup()" />
+          <input class="login" type="submit" value="LOGIN" />
+        </form>
+        <form id="signup" method="post" action="http://airhost.com:9898/signup">
+          <fieldset>
+            <input type="text" name="email" id="email" placeholder="e-mail" />
+          </fieldset>
+          <fieldset>
+            <input type="text" name="name" id="name" placeholder="name" />
+          </fieldset>
+          <fieldset>
+            <input type="password" name="password" id="password" placeholder="password" />
+          </fieldset>
+          <fieldset>
+            <input type="password" name="passwordConfirm" id="passwordConfirm" placeholder="confirm password" />
+          </fieldset>
+          <input class="create" type="submit" value="CREATE ACCOUNT" />
+          <div id="back" onclick="toLogin()"><</div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+    function toSignup () {
+      var form = document.getElementById('form'),
+          signup = document.getElementById('signup');
+
+      form.style.display = 'none';
+      signup.style.display = 'block';
+    }
+
+    function toLogin () {
+      var form = document.getElementById('form'),
+          signup = document.getElementById('signup');
+
+      form.style.display = 'block';
+      signup.style.display = 'none';
+    }
+  </script>
 </body>
 </html>

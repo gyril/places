@@ -6,7 +6,9 @@
   <script src='./assets/libs/lodash.js'></script>
   <script src='./assets/libs/angular-google-maps.js'></script>
   <script src="./app/app.module.js"></script>
+  <script src="./app/shared/utils.js"></script>
   <script src="./app/shared/domains.js"></script>
+  <script src="./app/shared/display.js"></script>
   <script src="./app/shared/dropdowns.js"></script>
   <script src="./app/shared/user.js"></script>
   <script src="./app/components/people_search.js"></script>
@@ -20,45 +22,60 @@
       </li>
     </ul>
   </div>
-  <div class="leftbar">
-    <div ng-controller="User as user" ng-show="user.me" ng-cloak>
-      <img ng-src="./assets/img/{{ user.me.photo }}" />
-      <div>{{ user.me.name }}</div>
-      <input type="text" people-search>
-      <ul>
-        <li ng-repeat="place in user.me.places" ng-click="user.showPlace(place)"/>
-          <a>{{ place.name }}</a>
-        </li>
-      </ul>
+
+  <div ng-controller="Display as display">
+    <div class="leftbar" ng-class="display.status">
+      <div ng-show="display.user" ng-cloak>
+        <div class="people-search">
+          <div class="people-search-label">Find a friend</div>
+          <input type="text" class="people-search-input" people-search>
+        </div>
+        <img ng-src="./assets/img/{{display.user.photo}}" class="profile-picture" ng-click="display.toggleLeftbar()" />
+        <div class="profile-name">{{ display.user.name }}</div>
+        <ul class="places-list">
+          <li ng-repeat="place in display.user.places" ng-click="display.showPlace(place)"/>
+            <a>{{ place.name }}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="map" ng-controller="Map as map">
+      <ui-gmap-google-map center="map.center" zoom="map.zoom" control="map.control" options="map.options" events="map.events">
+        <ui-gmap-search-box template="map.searchbox.template" events="map.searchbox.events" options="map.searchbox.options"></ui-gmap-search-box>
+        <ui-gmap-marker
+          idKey="map.currentMarker.id"
+          coords="map.currentMarker.coords"
+          icon="'https://mts.googleapis.com/vt/icon/name=icons/spotlight/spotlight-waypoint-a.png'"
+          options="{zIndex: 9999}"
+          >
+        </ui-gmap-marker>
+        <ui-gmap-markers
+          models="display.user.places"
+          coords="'self'"
+          click="map.showPlace"
+          >
+        </ui-gmap-markers>
+      </ui-gmap-google-map>
+      <div id="place" ng-class="map.currentPlace ? 'open' : ''">
+        <div class="place-search">
+          <div class="place-search-label">Find a place</div>
+          <input type="text" class="place-search-input">
+        </div>
+        <div class="place-picture" ng-class="map.currentPlace ? 'tilted' : ''" ng-click="map.mapService.togglePlace()">+</div>
+        <h3 class="place-name">{{ map.currentPlace.name }}</h3>
+        <div class="place-address">{{ map.currentPlace.address }}</div>
+        <div class="place-contacts">
+          <span class="place-phone">{{ map.currentPlace.phone }}</span><br>
+          <a class="place-website" href="{{ map.currentPlace.website }}" target="_blank">Go to website</a></span>
+        </div>
+        <div class="place-relation">
+          <button class="remove" ng-click="map.removeCurrentRelation()" ng-show="map.currentPlace.added">Remove from my map</button>
+          <button class="add" ng-click="map.addCurrentRelation()" ng-hide="map.currentPlace.added">Add to my map</button>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="map" ng-controller="Map as map">
-    <ui-gmap-google-map center="map.center" zoom="map.zoom" control="map.control" options="map.options" events="map.events">
-      <ui-gmap-search-box template="map.searchbox.template" events="map.searchbox.events" options="map.searchbox.options"></ui-gmap-search-box>
-      <ui-gmap-markers
-        models="map.places"
-        coords="'self'"
-        icon="icon">
-      </ui-gmap-markers>
-      <ui-gmap-marker
-        idKey="map.currentMarker.id"
-        coords="map.currentMarker.coords"
-        icon="'https://mts.googleapis.com/vt/icon/name=icons/spotlight/spotlight-waypoint-a.png'"
-        >
-</ui-gmap-marker>
-    </ui-gmap-google-map>
-    <div id="place" ng-show="map.currentPlace">
-      <h3 class="place-name">{{ map.currentPlace.name }}</h3>
-      <div class="place-contacts">
-        <span class="place-phone">{{ map.currentPlace.phone }}</span> <a class="place-website" href="{{ map.currentPlace.website }}" target="_blank">website</a></span>
-      </div>
-      <div class="place-address">{{ map.currentPlace.address }}</div>
-      <div class="place-relation">
-        <button ng-click="map.removeCurrentRelation()" ng-show="map.currentPlace.added">Remove from my map</button>
-        <button ng-click="map.addCurrentRelation()" ng-hide="map.currentPlace.added">Add to my map</button>
-      </div>
-      <div><a ng-click="map.mapService.hidePlace()">close</a></div>
-    </div>
-  </div>
+
 </body>
 </html>
