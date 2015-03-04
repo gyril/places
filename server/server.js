@@ -25,7 +25,7 @@ passport.use('local', new LocalStrategy({
 passport.use(new FacebookStrategy({
     clientID: "346135978909744",
     clientSecret: "38d4304faea16f2ec4747d39e8ed2422",
-    callbackURL: "http://airhost.com:9898/facebook",
+    callbackURL: "http://places-1.herokuapp.com/facebook",
     profileFields: ['id', 'displayName','picture.type(large)', 'emails']
   },
   function(accessToken, refreshToken, profile, done) {
