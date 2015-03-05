@@ -3,6 +3,11 @@ html, body {
   margin: 0; 
 }
 
+body {
+  width: 100%;
+  overflow: hidden;
+}
+
 a {
   cursor: pointer;
 }
@@ -92,26 +97,6 @@ a {
   height: 150px;
 }
 
-.place-picture {
-  position: absolute;
-  left: -75px;
-  top: 75px;
-  border-radius: 75px;
-  cursor: pointer;
-  width: 150px;
-  height: 150px;
-  background-color: #4A90E2;
-  box-shadow: -2px 2px 4px -2px rgba(0, 0, 0, .5);
-  color: white;
-  font-size: 100px;
-  text-align: center;
-  transition: transform .2s ease-out;
-}
-
-.place-picture.tilted {
-  transform: rotate(45deg);
-}
-
 .profile-name {
   position: absolute;
   top: 125px;
@@ -160,20 +145,23 @@ a {
 
 .place-name {
   position: relative;
-  left: 80px;
-  top: 70px;
+  left: 20px;
+  top: 120px;
+  max-width: 260px;
 }
 
 .place-address {
   position: relative;
   left: 20px;
   top: 120px;
+  max-width: 260px;
 }
 
 .place-contacts {
   position: relative;
   left: 20px;
   top: 150px;
+  max-width: 260px;
 }
 
 .place-contacts a {
@@ -207,10 +195,31 @@ a {
   text-shadow: none;
 }
 
+.place-picture {
+  position: absolute;
+  left: -27px;
+  top: 82px;
+  border-radius: 75px;
+  cursor: pointer;
+  width: 50px;
+  height: 50px;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, .5);
+  color: rgb(101, 123, 183);
+  font-size: 32px;
+  text-align: center;
+  border: 2px solid white;
+  background: white;
+  display: none;
+}
+
+#place.open .place-picture {
+  display: block;
+}
+
 #searchbox {
-  right: 100px;
-  top: 20px!important;
-  left: initial!important;
+  position: fixed;
+  top: 30px;
+  right: 20px;
   width: 260px;
   line-height: 30px;
   border: none;
@@ -221,6 +230,16 @@ a {
   font-size: 18px;
   outline: none;
   box-shadow: 0 2px 4px 0 black;
+  transition: right, box-shadow, background-color .2s ease-out;
+}
+
+#search-box.has-place #searchbox {
+  box-shadow: none!important;
+  background-color: transparent!important;
+}
+
+#search-box.has-place #searchbox::-webkit-input-placeholder {
+  color: transparent!important;
 }
 
 #searchbox::-webkit-input-placeholder {

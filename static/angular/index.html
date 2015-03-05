@@ -39,35 +39,36 @@
         </ul>
       </div>
     </div>
-
-    <div class="map" ng-controller="Map as map">
-      <ui-gmap-google-map center="map.center" zoom="map.zoom" control="map.control" options="map.options" events="map.events">
-        <ui-gmap-search-box template="map.searchbox.template" events="map.searchbox.events" options="map.searchbox.options"></ui-gmap-search-box>
-        <ui-gmap-marker
-          idKey="map.currentMarker.id"
-          coords="map.currentMarker.coords"
-          icon="'https://mts.googleapis.com/vt/icon/name=icons/spotlight/spotlight-waypoint-a.png'"
-          options="{zIndex: 9999}"
-          >
-        </ui-gmap-marker>
-        <ui-gmap-markers
-          models="display.user.places"
-          coords="'self'"
-          click="map.showPlace"
-          >
-        </ui-gmap-markers>
-      </ui-gmap-google-map>
+    
+    <div ng-controller="Map as map">
+      <div class="map">
+        <ui-gmap-google-map center="map.center" zoom="map.zoom" control="map.control" options="map.options" events="map.events">
+          <ui-gmap-marker
+            idKey="map.currentMarker.id"
+            coords="map.currentMarker.coords"
+            icon="'https://mts.googleapis.com/vt/icon/name=icons/spotlight/spotlight-waypoint-a.png'"
+            options="{zIndex: 9999}"
+            >
+          </ui-gmap-marker>
+          <ui-gmap-markers
+            models="display.user.places"
+            coords="'self'"
+            click="map.showPlace"
+            >
+          </ui-gmap-markers>
+          <ui-gmap-search-box template="map.searchbox.template" events="map.searchbox.events" options="map.searchbox.options" parentdiv="'search-box'"></ui-gmap-search-box>
+        </ui-gmap-google-map>
+      </div>
       <div id="place" ng-class="map.currentPlace ? 'open' : ''">
-        <div class="place-search">
+        <div class="place-search" id="search-box" ng-class="map.currentPlace ? 'has-place' : ''" >
           <div class="place-search-label">Find a place</div>
-          <input type="text" class="place-search-input">
         </div>
-        <div class="place-picture" ng-class="map.currentPlace ? 'tilted' : ''" ng-click="map.mapService.togglePlace()">+</div>
+        <div class="place-picture" ng-click="map.mapService.togglePlace()">x</div>
         <h3 class="place-name">{{ map.currentPlace.name }}</h3>
         <div class="place-address">{{ map.currentPlace.address }}</div>
         <div class="place-contacts">
-          <span class="place-phone">{{ map.currentPlace.phone }}</span><br>
-          <a class="place-website" href="{{ map.currentPlace.website }}" target="_blank">Go to website</a></span>
+          <span ng-show="map.currentPlace.phone" class="place-phone">{{ map.currentPlace.phone }}</span><br>
+          <a ng-show="map.currentPlace.website" class="place-website" href="{{ map.currentPlace.website }}" target="_blank">Go to website</a></span>
         </div>
         <div class="place-relation">
           <button class="remove" ng-click="map.removeCurrentRelation()" ng-show="map.currentPlace.added">Remove from my map</button>
