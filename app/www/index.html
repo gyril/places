@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title></title>
+
+    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+    <link href="css/ionic.app.css" rel="stylesheet">
+    -->
+
+    <!-- ionic/angularjs js -->
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+    <script src="lib/angular-resource.js"></script>
+
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="cordova.js"></script>
+
+    <!-- your app's js -->
+    <script src="js/app.js"></script>
+
+    <script src="lib/openfb.js"></script>
+  </head>
+  <body ng-app="starter">
+
+    <ion-pane>
+      <ion-content ng-controller="MapController" scrollbar-y="false" scrollbar-x="false">
+        <div id="login" ng-controller="LoginController" ng-hide="userService.user">
+          <div id="logo"></div>
+          <div class="btn" ng-click="facebookLogin()"></div>
+        </div>
+        <div id="map" data-tap-disabled="true"></div>
+        <button id="geoloc" ng-click="geoloc()" class="button icon ion-pinpoint"></button>
+        <div id="left" ng-class="leftBarStatus" on-swipe-right="showLeftBar()" on-swipe-left="hideLeftBar()">
+          <img class="profile-pic" ng-src="http://graph.facebook.com/{{userService.user.id}}/picture?width=100&height=100">
+          <h2 class="name">{{userService.user.name}}</h2>
+          <ul class="places">
+            <li ng-repeat="place in userService.user.places">{{place.name}}</li>
+          </ul>
+        </div>
+        <div id="right" ng-class="rightBarStatus" on-swipe-left="showRightBar()" on-swipe-right="hideRightBar()"></div>
+        <div id="leftswipe" on-swipe-right="showLeftBar()"></div>
+        <div id="rightswipe" on-swipe-left="showRightBar()"></div>
+        <div id="search-place" ng-class="rightBarStatus">
+          <label class="item item-input">
+            <!-- <i class="icon ion-search placeholder-icon"></i> -->
+            <input type="text" placeholder="Find a place">
+          </label>
+        </div>
+      </ion-content>
+    </ion-pane>
+    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyClGJDuUnPapo-qhzY6iT8aWgAS0MvD_VQ&sensor=true"></script>
+  </body>
+</html>

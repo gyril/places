@@ -9,6 +9,7 @@ var path = require('path')
   , session = require('express-session')
   , passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy
+  , BasicStrategy = require('passport-http').BasicStrategy
   , FacebookStrategy = require('passport-facebook').Strategy
   , sql = require('./sql')
   , port = Number(process.env.PORT || config.local.PORT)
@@ -21,6 +22,18 @@ passport.use('local', new LocalStrategy({
     sql.auth(email, password, done)
   }
 ))
+
+passport.use('basic', new BasicStrategy(function (fbid, password, done) {
+  sql.fbAuth({id: fbid}, function (err, results) {
+    if (err)
+      return done(err)
+
+    if (results)
+      return done(null, results)
+
+    return done('not signed up', false)
+  })
+}))
 
 passport.use(new FacebookStrategy({
     clientID: "346135978909744",
@@ -39,7 +52,7 @@ passport.use(new FacebookStrategy({
       sql.fbAddUser(profile, done)
     })
   }
-));
+))
 
 passport.serializeUser(function (user, done) {
   done(null, {id: user.id})
@@ -61,7 +74,7 @@ app.use(session({
 }))
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*")
-  res.header("Access-Control-Allow-Headers", "X-Requested-With")
+  res.header("Access-Control-Allow-Headers", "X-Requested-With, Authorization")
   next()
 })
 app.use(bodyParser.urlencoded({ extended: false }))

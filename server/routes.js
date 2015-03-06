@@ -15,6 +15,22 @@ exports.mount = function (app) {
     successRedirect: '/angular/'
   }))
 
+  app.get('/api/me', passport.authenticate('basic'), function (req, res) {
+    if (!req.user) {
+      res.status('401').send({message: 'Unauthorized'})
+    } else {
+      sql.fetchPlacesFromUser(req.user.id, function (err, results) {
+        if (err)
+          return console.log(err)
+
+        var user = _.omit(req.user, 'password')
+        user.places = results
+
+        res.send(user)
+      })
+    }
+  })
+
   app.get('/auth/facebook', passport.authenticate('facebook'))
   app.get('/facebook', passport.authenticate('facebook', { 
     successRedirect: '/angular/',
