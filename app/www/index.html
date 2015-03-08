@@ -16,6 +16,8 @@
     <script src="lib/ionic/js/ionic.bundle.js"></script>
     <script src="lib/angular-resource.js"></script>
 
+    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyClGJDuUnPapo-qhzY6iT8aWgAS0MvD_VQ&sensor=true&libraries=places"></script>
+
     <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
 
@@ -26,32 +28,48 @@
   </head>
   <body ng-app="starter">
 
-    <ion-pane>
-      <ion-content ng-controller="MapController" scrollbar-y="false" scrollbar-x="false">
-        <div id="login" ng-controller="LoginController" ng-hide="userService.user">
+    <ion-pane ng-controller="LoginController" ng-hide="userService.logged" style="z-index: 2;" ng-cloak>
+      <ion-content scroll="false" scrollbar-y="false" scrollbar-x="false">
+        <div id="login">
+          <div id="background"></div>
           <div id="logo"></div>
           <div class="btn" ng-click="facebookLogin()"></div>
         </div>
-        <div id="map" data-tap-disabled="true"></div>
-        <button id="geoloc" ng-click="geoloc()" class="button icon ion-pinpoint"></button>
-        <div id="left" ng-class="leftBarStatus" on-swipe-right="showLeftBar()" on-swipe-left="hideLeftBar()">
-          <img class="profile-pic" ng-src="http://graph.facebook.com/{{userService.user.id}}/picture?width=100&height=100">
-          <h2 class="name">{{userService.user.name}}</h2>
-          <ul class="places">
-            <li ng-repeat="place in userService.user.places">{{place.name}}</li>
-          </ul>
+      </ion-content>
+    </ion-pane>
+
+    <ion-pane ng-controller="ViewsController" ng-cloak>
+      <ion-content scroll="false" scrollbar-y="false" scrollbar-x="false">
+        <div ng-controller="MapController" class="scroll">
+          <div id="map" data-tap-disabled="true"></div>
+          <button id="geoloc" ng-click="geoloc()" class="button icon ion-pinpoint"></button>
         </div>
-        <div id="right" ng-class="rightBarStatus" on-swipe-left="showRightBar()" on-swipe-right="hideRightBar()"></div>
+        
+        <div id="left" ng-class="leftBarStatus" on-swipe-right="showLeftBar()" on-swipe-left="hideLeftBar()" ng-controller="LeftBarController">
+          <img class="profile-pic" ng-src="http://graph.facebook.com/{{userService.user.fbid}}/picture?width=100&height=100">
+          <h2 class="name">{{userService.user.name}}</h2>
+          <ion-scroll zooming="false" direction="y" class="places">
+            <ul>
+              <li ng-repeat="place in userService.user.places" on-tap="showPlace(place)">{{place.name}}</li>
+            </ul>
+          </ion-scroll>
+        </div>
+
+        <div id="right" ng-class="rightBarStatus" on-swipe-left="showRightBar()" on-swipe-right="hideRightBar()" ng-controller="RightBarController">
+          <h2 class="name">{{currentPlace.name}}</h2>
+          <div class="phone"><a href="tel:{{currentPlace.phone}}">{{currentPlace.phone}}</a></div>
+          <div class="address">{{currentPlace.address}}</div>
+          <div class="website" ng-show="currentPlace.website"><a on-tap="openExternal(currentPlace.website)">{{currentPlace.website}}</a></div>
+        </div>
+
         <div id="leftswipe" on-swipe-right="showLeftBar()"></div>
         <div id="rightswipe" on-swipe-left="showRightBar()"></div>
-        <div id="search-place" ng-class="rightBarStatus">
+        <div id="search-place" ng-class="rightBarStatus" ng-controller="SearchPlaceController">
           <label class="item item-input">
-            <!-- <i class="icon ion-search placeholder-icon"></i> -->
-            <input type="text" placeholder="Find a place">
+            <input type="text" placeholder="Find a place" id="search-place-input">
           </label>
         </div>
       </ion-content>
     </ion-pane>
-    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyClGJDuUnPapo-qhzY6iT8aWgAS0MvD_VQ&sensor=true"></script>
   </body>
 </html>
