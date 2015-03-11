@@ -30,11 +30,16 @@ angular.module('starter', ['ionic', 'ngResource'])
   var fbid = window.localStorage.getItem('fbid');
 
   self.logged = (fbid !== null);
+  self.authString = self.logged ? btoa(fbid+":"+btoa(fbid)) : '';
+
   self.sync = function () {
+    if (!self.logged)
+      return;
+
     $http({
       method: "GET",
       url: apiServer+'/api/v1/me',
-      headers: { "Authorization": "Basic "+btoa(fbid+":"+btoa(fbid)) }
+      headers: { "Authorization": "Basic "+self.authString }
     }).success(function (me) {
       self.user = me;
       for (var i = 0; i < self.user.places.length; i++) {
@@ -42,11 +47,9 @@ angular.module('starter', ['ionic', 'ngResource'])
       }
     });
   }
-
-  if (self.logged) {
-    self.sync();
-  }
-
+  
+  self.sync();
+  
   self.fbLogin = function () {
     openFB.login(function (response) {
       if (response.status === 'connected') {
@@ -76,7 +79,7 @@ angular.module('starter', ['ionic', 'ngResource'])
       method: "POST",
       url: apiServer+'/api/v1/relation/add',
       data: {place: place},
-      headers: { "Authorization": "Basic "+btoa(fbid+":"+btoa(fbid)) }
+      headers: { "Authorization": "Basic "+self.authString }
     }).success(function (results) {
       if (results.message === 'OK') {
         place.added = true;
@@ -90,13 +93,21 @@ angular.module('starter', ['ionic', 'ngResource'])
       method: "POST",
       url: apiServer+'/api/v1/relation/remove',
       data: {place: place},
-      headers: { "Authorization": "Basic "+btoa(fbid+":"+btoa(fbid)) }
+      headers: { "Authorization": "Basic "+self.authString }
     }).success(function (results) {
       if (results.message === 'OK') {
         place.added = false;
         self.user.places.splice(self.user.places.indexOf(place), 1);
       }
     });
+  }
+})
+
+.service('peopleService', function () {
+  var self = this;
+
+  self.show = function (user) {
+    console.log(user);
   }
 })
 
@@ -185,6 +196,26 @@ angular.module('starter', ['ionic', 'ngResource'])
           cb(res);
         });
       });
+    } else {
+      cb([]);
+    }
+  }
+})
+
+.service('searchPeopleService', function ($http, apiServer, userService) {
+  var self = this;
+
+  self.search = function (query, cb) {
+    if (query.length > 0) {
+      $http({
+        method: "GET",
+        url: apiServer+'/api/v1/search/users/'+query,
+        headers: { "Authorization": "Basic "+userService.authString }
+      }).success(function (predictions) {
+        cb(predictions);
+      });
+    } else {
+      cb([]);
     }
   }
 })
@@ -282,13 +313,14 @@ angular.module('starter', ['ionic', 'ngResource'])
   }
 })
 
-.controller('RightBarController', function ($scope, mapService, userService) {
+.controller('RightBarController', function ($scope, mapService, userService, $ionicSlideBoxDelegate) {
   $scope.mapService = mapService;
   $scope.currentPlace = null;
 
   $scope.$watch('mapService.currentPlace', function (place) {
     if (place) {
       $scope.currentPlace = place;
+      $ionicSlideBoxDelegate.update();
     }
   });
 
@@ -319,6 +351,22 @@ angular.module('starter', ['ionic', 'ngResource'])
         mapService.showPlace(place);
       });
     });
+  }
+})
+
+.controller('SearchPeopleController', function ($scope, searchPeopleService, peopleService) {
+  $scope.query = '';
+  $scope.predictions = [];
+
+  $scope.$watch('query', function () {
+    searchPeopleService.search($scope.query, function (res) {
+      $scope.predictions = res;
+    });
+  });
+
+  $scope.pick = function (prediction) {
+    $scope.predictions = [];
+    peopleService.show(prediction);
   }
 })
 

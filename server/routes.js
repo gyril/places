@@ -46,7 +46,7 @@ exports.mount = function (app) {
   })
 
   app.post('/api/v1/relation/add', function (req, res) {
-    console.log(req.user.name, 'add', req.body.place.id)
+    console.log(req.user.name, 'add', req.body.place.name)
     async.series({
       insertPlace: function (done) {
         sql.insertPlace(req.body.place, done)
@@ -63,12 +63,25 @@ exports.mount = function (app) {
   })
 
   app.post('/api/v1/relation/remove', function (req, res) {
-    console.log(req.user.name, 'remove', req.body.place.id)
+    console.log(req.user.name, 'remove', req.body.place.name)
     sql.removeRelation(req.user.id, req.body.place.id, function (err) {
       if (err)
         return console.log(err)
 
       res.send({message: "OK"})
+    })
+  })
+
+  app.get('/api/v1/search/users/:q', function (req, res) {
+    sql.fetchUsersFromQuery(req.params.q, function (err, results) {
+      if (err)
+        return console.log(err)
+
+      var users = _.map(results, function (user) {
+        return _.omit(user, 'password')
+      })
+
+      res.send(users)
     })
   })
 

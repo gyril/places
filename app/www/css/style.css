@@ -171,13 +171,13 @@
 }
 
 #search-place.swiped #search-place-predictions li {
-  border-color: 1px solid rgb(101, 124, 184);
+  border-top: 1px solid rgb(101, 124, 184);
 }
 
 #left img.profile-pic {
   position: absolute;
   right: -50px;
-  top: 2%;
+  top: 12%;
   border-radius: 50px;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .5);
 }
@@ -185,7 +185,7 @@
 #left h2.name {
   margin: 0;
   position: absolute;
-  top: 6%;
+  top: 16%;
   left: 20px;
   color: white;
   font-family: "Open Sans";
@@ -193,10 +193,10 @@
 
 #left .places {
   position: absolute;
-  top: 20%;
+  top: 25%;
   right: 10%;
   width: 80%;
-  height: 75%;
+  height: 70%;
 }
 
 #left .places li {
@@ -205,6 +205,47 @@
   border-bottom: 1px solid white;
   text-align: right;
   padding: 15px 0;
+}
+
+#left #search-people {
+  position: absolute;
+  top: 2%;
+  right: 10%;
+  width: 80%;
+}
+
+#left #search-people label {
+  background-color: transparent;
+  border: none;
+  border-bottom: 2px solid white;
+  padding-left: 0;
+}
+
+
+#left #search-people label input::-webkit-input-placeholder {
+  color: #e1e1e1;
+}
+
+#left #search-people label input {
+  color: white;
+}
+
+#left #search-people #search-people-predictions {
+  background-color: rgba(0, 10, 50, 0.9);
+  color: white;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+#left #search-people #search-people-predictions li {
+  line-height: 3em;
+  max-height: 3em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-top: 1px solid rgb(101, 124, 184);
+  padding: 0px 10px;
+  cursor: pointer;
 }
 
 #right {

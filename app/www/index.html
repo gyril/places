@@ -50,6 +50,7 @@
         </div>
         
         <div id="left" ng-class="leftBarStatus" on-swipe-right="showLeftBar()" on-swipe-left="hideLeftBar()" ng-controller="LeftBarController">
+
           <img class="profile-pic" ng-src="http://graph.facebook.com/{{userService.user.fbid}}/picture?width=100&height=100">
           <h2 class="name">{{userService.user.name}}</h2>
           <ion-scroll zooming="false" direction="y" class="places">
@@ -57,10 +58,19 @@
               <li ng-repeat="place in userService.user.places" on-tap="showPlace(place)">{{place.name}}</li>
             </ul>
           </ion-scroll>
+
+          <div id="search-people" ng-controller="SearchPeopleController">
+            <label class="item item-input">
+              <input type="text" placeholder="Find a friend" ng-model="query">
+            </label>
+            <ul ng-show="predictions" id="search-people-predictions">
+              <li ng-repeat="prediction in predictions" on-tap="pick(prediction)">{{prediction.name}}</li>
+            </ul>
+          </div>
         </div>
 
         <div id="right" ng-class="rightBarStatus" on-swipe-left="showRightBar()" on-swipe-right="hideRightBar()" ng-controller="RightBarController">
-          <div ng-show="currentPlace">
+          <div ng-if="currentPlace">
             <h2 class="name">{{currentPlace.name}}</h2>
             <div class="phone"><a href="tel:{{currentPlace.phone}}">{{currentPlace.phone}}</a></div>
             <div class="address">{{currentPlace.address}}</div>
