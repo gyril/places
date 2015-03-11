@@ -8,23 +8,23 @@ var path = require('path')
   , cookieParser = require('cookie-parser')
   , session = require('express-session')
   , passport = require('passport')
-  , LocalStrategy = require('passport-local').Strategy
+  // , LocalStrategy = require('passport-local').Strategy
   , BasicStrategy = require('passport-http').BasicStrategy
   , FacebookStrategy = require('passport-facebook').Strategy
   , sql = require('./sql')
   , port = Number(process.env.PORT || config.local.PORT)
 
 
-passport.use('local', new LocalStrategy({
-    usernameField: 'email',
-    passwordField: 'password'
-  }, function (email, password, done) {
-    sql.auth(email, password, done)
-  }
-))
+// passport.use('local', new LocalStrategy({
+//     usernameField: 'email',
+//     passwordField: 'password'
+//   }, function (email, password, done) {
+//     sql.auth(email, password, done)
+//   }
+// ))
 
-passport.use('basic', new BasicStrategy(function (fbid, password, done) {
-  sql.fbAuth({id: fbid}, function (err, results) {
+passport.use('basic', new BasicStrategy(function (fbid, token, done) {
+  sql.fbAuth(fbid, token, function (err, results) {
     if (err)
       return done(err)
 
@@ -74,7 +74,7 @@ app.use(session({
 }))
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*")
-  res.header("Access-Control-Allow-Headers", "X-Requested-With, Authorization")
+  res.header("Access-Control-Allow-Headers", "X-Requested-With, Authorization, Content-Type")
   next()
 })
 app.use(bodyParser.urlencoded({ extended: false }))

@@ -15,21 +15,64 @@ exports.mount = function (app) {
     successRedirect: '/angular/'
   }))
 
-  app.get('/api/me', passport.authenticate('basic'), function (req, res) {
+  app.get('/api/v1/*', passport.authenticate('basic'), function (req, res, next) {
     if (!req.user) {
-      res.status('401').send({message: 'Unauthorized'})
-    } else {
-      sql.fetchPlacesFromUser(req.user.id, function (err, results) {
-        if (err)
-          return console.log(err)
-
-        var user = _.omit(req.user, 'password')
-        user.places = results
-
-        res.send(user)
-      })
+      return res.status('401').send({message: 'Unauthorized'})
     }
+
+    console.log('GET authenticated for', req.user.name)
+    next()
   })
+
+  app.post('/api/v1/*', passport.authenticate('basic'), function (req, res, next) {
+    if (!req.user) {
+      return res.status('401').send({message: 'Unauthorized'})
+    }
+
+    console.log('POST authenticated for', req.user.name)
+    next()
+  })
+
+  app.get('/api/v1/me', function (req, res) {
+    sql.fetchPlacesFromUser(req.user.id, function (err, results) {
+      if (err)
+        return console.log(err)
+
+      var user = _.omit(req.user, 'password')
+      user.places = results
+
+      res.send(user)
+    })
+  })
+
+  app.post('/api/v1/relation/add', function (req, res) {
+    console.log(req.user.name, 'add', req.body.place.id)
+    async.series({
+      insertPlace: function (done) {
+        sql.insertPlace(req.body.place, done)
+      },
+      upsertRelation: function (done) {
+        sql.upsertRelation(req.user.id, req.body.place.id, done)
+      }
+    }, function (err, results) {
+      if (err)
+        return console.log(err)
+
+      res.send({message: "OK"})
+    })
+  })
+
+  app.post('/api/v1/relation/remove', function (req, res) {
+    console.log(req.user.name, 'remove', req.body.place.id)
+    sql.removeRelation(req.user.id, req.body.place.id, function (err) {
+      if (err)
+        return console.log(err)
+
+      res.send({message: "OK"})
+    })
+  })
+
+  // FIXME: LEGACY, NON RESTFUL ROUTES
 
   app.get('/auth/facebook', passport.authenticate('facebook'))
   app.get('/facebook', passport.authenticate('facebook', { 

@@ -20,20 +20,23 @@ this.auth = function (email, password, done) {
   })
 }
 
-this.fbAuth = function (profile, done) {
-  var id = profile.id
+this.fbAuth = function (fbid, token, done) {
+  checkToken(fbid, token, function (err) {
+    if (err)
+      return done('Invalid token')
 
-  pgq.connect()
-  .then(function () {
-    return pgq.client.query('SELECT * FROM places.users WHERE fbid=$1', [id])
-  })
-  .then(function (data) {
-    pgq.client.done()
-    if (data.rows.length == 0) { return done(null, false) }
-    return done(null, data.rows[0])
-  })
-  .fail(function (error) {
-    return done(error)
+    pgq.connect()
+    .then(function () {
+      return pgq.client.query('SELECT * FROM places.users WHERE fbid=$1', [fbid])
+    })
+    .then(function (data) {
+      pgq.client.done()
+      if (data.rows.length == 0) { return done(null, false) }
+      return done(null, data.rows[0])
+    })
+    .fail(function (error) {
+      return done(error)
+    })
   })
 }
 
@@ -160,3 +163,7 @@ this.removeRelation = function (userid, placeid, done) {
 }
 
 module.exports = this
+
+function checkToken (fbid, token, done) {
+  return done(!(new Buffer(fbid).toString('base64') === token))
+}

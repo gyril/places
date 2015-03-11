@@ -1,4 +1,10 @@
 {
   "name": "Places",
-  "app_id": "b3af855e"
+  "app_id": "b3af855e",
+  "proxies": [
+    {
+      "path": "http://airhost.com:9898",
+      "proxyUrl": "http://places-1.herokuapp.com"
+    }
+  ]
 }

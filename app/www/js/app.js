@@ -23,22 +23,27 @@ angular.module('starter', ['ionic', 'ngResource'])
   });
 })
 
-.service('userService', function ($rootScope, $http, iconFactory) {
+.constant('apiServer', 'http://airhost.com:9898')
+
+.service('userService', function ($rootScope, $http, apiServer, iconFactory) {
   var self = this;
   var fbid = window.localStorage.getItem('fbid');
 
+  self.logged = (fbid !== null);
   self.sync = function () {
     $http({
       method: "GET",
-      url: 'http://places-1.herokuapp.com/api/me',
-      headers: { "Authorization": "Basic "+btoa(fbid+":null") }
+      url: apiServer+'/api/v1/me',
+      headers: { "Authorization": "Basic "+btoa(fbid+":"+btoa(fbid)) }
     }).success(function (me) {
       self.user = me;
+      for (var i = 0; i < self.user.places.length; i++) {
+        self.user.places[i].added = true;
+      }
     });
   }
 
-  if (fbid !== null) {
-    self.logged = true;
+  if (self.logged) {
     self.sync();
   }
 
@@ -65,6 +70,34 @@ angular.module('starter', ['ionic', 'ngResource'])
       }
     }, {scope: 'email'});
   }
+
+  self.addRelation = function (place) {
+    $http({
+      method: "POST",
+      url: apiServer+'/api/v1/relation/add',
+      data: {place: place},
+      headers: { "Authorization": "Basic "+btoa(fbid+":"+btoa(fbid)) }
+    }).success(function (results) {
+      if (results.message === 'OK') {
+        place.added = true;
+        self.user.places.push(place);
+      }
+    });
+  }
+
+  self.removeRelation = function (place) {
+    $http({
+      method: "POST",
+      url: apiServer+'/api/v1/relation/remove',
+      data: {place: place},
+      headers: { "Authorization": "Basic "+btoa(fbid+":"+btoa(fbid)) }
+    }).success(function (results) {
+      if (results.message === 'OK') {
+        place.added = false;
+        self.user.places.splice(self.user.places.indexOf(place), 1);
+      }
+    });
+  }
 })
 
 .service('mapService', function ($rootScope, iconFactory) {
@@ -83,6 +116,7 @@ angular.module('starter', ['ionic', 'ngResource'])
     };
 
     self.map = new google.maps.Map(document.getElementById("map"), mapOptions);
+    self.PlacesService = new google.maps.places.PlacesService(self.map);
     $rootScope.$emit('mapReady');
 
     self.meMarker = new google.maps.Marker({
@@ -138,15 +172,20 @@ angular.module('starter', ['ionic', 'ngResource'])
 
 .service('searchPlaceService', function ($rootScope, mapService, placeFactory) {
   var self = this;
-
-  self.initAutocomplete = function (autocomplete) {
-    autocomplete.bindTo('bounds', mapService.map);
-    google.maps.event.addListener(autocomplete, 'place_changed', function () {
-      var gmapplace = autocomplete.getPlace();
-      $rootScope.$apply(function () {
-        mapService.showPlace(placeFactory.fromGoogleMaps(gmapplace));
+  self.service = new google.maps.places.AutocompleteService();
+  
+  self.autocomplete = function (query, cb) {
+    if (query.length > 0) {
+      self.service.getPlacePredictions({
+        bounds: mapService.map.getBounds(),
+        input: query,
+        types: ['establishment']
+      }, function (res) {
+        $rootScope.$apply(function () {
+          cb(res);
+        });
       });
-    });
+    }
   }
 })
 
@@ -165,7 +204,7 @@ angular.module('starter', ['ionic', 'ngResource'])
   }
 })
 
-.factory('placeFactory', function () {
+.factory('placeFactory', function (userService) {
   return {
     fromGoogleMaps: function (gmapplace) {
       return {
@@ -179,13 +218,14 @@ angular.module('starter', ['ionic', 'ngResource'])
         website: gmapplace.website,
         phone: gmapplace.international_phone_number,
         latitude: gmapplace.geometry.location.toUrlValue().split(",")[0],
-        longitude: gmapplace.geometry.location.toUrlValue().split(",")[1]
+        longitude: gmapplace.geometry.location.toUrlValue().split(",")[1],
+        added: ( _.find(userService.user.places, function (item) { return _.contains(item, gmapplace.place_id) }) ) ? true : false
       }
     }
   }
 })
 
-.controller('MapController', function ($scope, userService, mapService) {
+.controller('MapController', function ($scope, $rootScope, userService, mapService) {
   $scope.userService = userService;
   
   $scope.$watch('userService.user.places', function (places) {
@@ -195,7 +235,9 @@ angular.module('starter', ['ionic', 'ngResource'])
   });
 
   $scope.geoloc = mapService.geoloc;
-  $scope.geoloc();
+  $rootScope.$on('mapReady', function () {
+    $scope.geoloc();
+  });
 })
 
 .controller('ViewsController', function ($scope, $rootScope, userService) {
@@ -240,22 +282,44 @@ angular.module('starter', ['ionic', 'ngResource'])
   }
 })
 
-.controller('RightBarController', function ($scope, mapService) {
+.controller('RightBarController', function ($scope, mapService, userService) {
   $scope.mapService = mapService;
   $scope.currentPlace = null;
 
   $scope.$watch('mapService.currentPlace', function (place) {
-    $scope.currentPlace = place;
+    if (place) {
+      $scope.currentPlace = place;
+    }
   });
+
+  $scope.add = function (place) {
+    userService.addRelation(place);
+  }
+
+  $scope.remove = function (place) {
+    userService.removeRelation(place);
+  }
 })
 
-.controller('SearchPlaceController', function ($scope, $rootScope, searchPlaceService) {
-  var input = document.getElementById('search-place-input');
-  var autocomplete = new google.maps.places.Autocomplete(input);
+.controller('SearchPlaceController', function ($scope, searchPlaceService, mapService, placeFactory) {
+  $scope.query = '';
+  $scope.predictions = [];
 
-  $rootScope.$on('mapReady', function () {
-    searchPlaceService.initAutocomplete(autocomplete);
+  $scope.$watch('query', function () {
+    searchPlaceService.autocomplete($scope.query, function (res) {
+      $scope.predictions = res;
+    });
   });
+
+  $scope.pick = function (prediction) {
+    $scope.predictions = [];
+    mapService.PlacesService.getDetails({placeId: prediction.place_id}, function (gmapplace) {
+      var place = placeFactory.fromGoogleMaps(gmapplace);
+      $scope.$apply(function () {
+        mapService.showPlace(place);
+      });
+    });
+  }
 })
 
 .controller('LoginController', function ($scope, userService) {

@@ -147,6 +147,33 @@
   color: #e1e1e1;
 }
 
+#search-place #search-place-predictions {
+  background-color: rgba(0,0,0,.7);
+  color: white;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  transition: background-color .2s ease-out;
+}
+
+#search-place.swiped #search-place-predictions {
+  background-color: rgba(0, 10, 50, 0.9);
+}
+
+#search-place #search-place-predictions li {
+  line-height: 3em;
+  max-height: 3em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-top: 1px solid white;
+  padding: 0px 10px;
+  cursor: pointer;
+}
+
+#search-place.swiped #search-place-predictions li {
+  border-color: 1px solid rgb(101, 124, 184);
+}
+
 #left img.profile-pic {
   position: absolute;
   right: -50px;
@@ -200,4 +227,29 @@
 #right .website {
   text-decoration: underline;
   margin: 6% 0%;
+}
+
+#right .added {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-top: 10%;
+  border: 2px solid white;
+  border-radius: 2px;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,.5);
+}
+
+#right .added span {
+  display: block;
+  padding: 10px;
+}
+
+#right .added .add {
+  background: white;
+  color: rgb(123, 149, 193);
+}
+
+#right .added .remove {
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,.5) inset;
+  text-shadow: 0 2px 4px rgba(0,0,0,.5);
 }

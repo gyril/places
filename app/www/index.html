@@ -12,10 +12,14 @@
     <link href="css/ionic.app.css" rel="stylesheet">
     -->
 
+    <!-- lodash -->
+    <script src='lib/lodash.js'></script>
+
     <!-- ionic/angularjs js -->
     <script src="lib/ionic/js/ionic.bundle.js"></script>
     <script src="lib/angular-resource.js"></script>
 
+    <!-- google maps + places library -->
     <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyClGJDuUnPapo-qhzY6iT8aWgAS0MvD_VQ&sensor=true&libraries=places"></script>
 
     <!-- cordova script (this will be a 404 during development) -->
@@ -56,19 +60,30 @@
         </div>
 
         <div id="right" ng-class="rightBarStatus" on-swipe-left="showRightBar()" on-swipe-right="hideRightBar()" ng-controller="RightBarController">
-          <h2 class="name">{{currentPlace.name}}</h2>
-          <div class="phone"><a href="tel:{{currentPlace.phone}}">{{currentPlace.phone}}</a></div>
-          <div class="address">{{currentPlace.address}}</div>
-          <div class="website" ng-show="currentPlace.website"><a on-tap="openExternal(currentPlace.website)">{{currentPlace.website}}</a></div>
+          <div ng-show="currentPlace">
+            <h2 class="name">{{currentPlace.name}}</h2>
+            <div class="phone"><a href="tel:{{currentPlace.phone}}">{{currentPlace.phone}}</a></div>
+            <div class="address">{{currentPlace.address}}</div>
+            <div class="website" ng-show="currentPlace.website"><a on-tap="openExternal(currentPlace.website)">{{currentPlace.website}}</a></div>
+            <div class="added">
+              <span ng-hide="currentPlace.added" class="add" ng-click="add(currentPlace)">Add to my map</span>
+              <span ng-show="currentPlace.added" class="remove" ng-click="remove(currentPlace)">Remove from my map</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="search-place" ng-class="rightBarStatus" ng-controller="SearchPlaceController">
+          <label class="item item-input">
+            <input type="text" placeholder="Find a place" ng-model="query">
+          </label>
+          <ul ng-show="predictions" id="search-place-predictions">
+            <li ng-repeat="prediction in predictions" on-tap="pick(prediction)">{{prediction.description}}</li>
+          </ul>
         </div>
 
         <div id="leftswipe" on-swipe-right="showLeftBar()"></div>
         <div id="rightswipe" on-swipe-left="showRightBar()"></div>
-        <div id="search-place" ng-class="rightBarStatus" ng-controller="SearchPlaceController">
-          <label class="item item-input">
-            <input type="text" placeholder="Find a place" id="search-place-input">
-          </label>
-        </div>
+
       </ion-content>
     </ion-pane>
   </body>
