@@ -20,7 +20,7 @@ this.auth = function (email, password, done) {
   })
 }
 
-this.fbAuth = function (fbid, token, done) {
+this.fbCheck = function (fbid, token, done) {
   checkToken(fbid, token, function (err) {
     if (err)
       return done('Invalid token')
@@ -37,6 +37,21 @@ this.fbAuth = function (fbid, token, done) {
     .fail(function (error) {
       return done(error)
     })
+  })
+}
+
+this.fbAuth = function (fbid, done) {
+  pgq.connect()
+  .then(function () {
+    return pgq.client.query('SELECT * FROM places.users WHERE fbid=$1', [fbid])
+  })
+  .then(function (data) {
+    pgq.client.done()
+    if (data.rows.length == 0) { return done(null, false) }
+    return done(null, data.rows[0])
+  })
+  .fail(function (error) {
+    return done(error)
   })
 }
 

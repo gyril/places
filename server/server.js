@@ -24,7 +24,7 @@ var path = require('path')
 // ))
 
 passport.use('basic', new BasicStrategy(function (fbid, token, done) {
-  sql.fbAuth(fbid, token, function (err, results) {
+  sql.fbCheck(fbid, token, function (err, results) {
     if (err)
       return done(err)
 
@@ -42,7 +42,7 @@ passport.use(new FacebookStrategy({
     profileFields: ['id', 'displayName','picture.type(large)', 'emails']
   },
   function(accessToken, refreshToken, profile, done) {
-    sql.fbAuth(profile, function (err, results) {
+    sql.fbAuth(profile.id, function (err, results) {
       if (err)
         return done(err)
 
